@@ -22,7 +22,7 @@ public class FactorialFrontend extends UntypedActor {
       "factorialBackendRouter");
 
   public FactorialFrontend(int upToN, boolean repeat) {
-    this.upToN = upToN;
+    this.upToN = 10000;
     this.repeat = repeat;
   }
 
@@ -58,6 +58,8 @@ public class FactorialFrontend extends UntypedActor {
 
     } else if (message instanceof ReceiveTimeout) {
       log.info("Timeout");
+      counter = 0;
+      totpi = 0;
       sendJobs();
 
     } else {
@@ -67,8 +69,8 @@ public class FactorialFrontend extends UntypedActor {
 
   void sendJobs() {
     log.info("Starting batch of factorials up to [{}]", upToN);
-    for (int n = 1; n <= upToN; n++) {
-      backend.tell(n, getSelf());
+    for (int n = 0; n <= upToN; n ++) {
+      backend.tell(new PiWork(n, 10000), getSelf());
     }
   }
 
